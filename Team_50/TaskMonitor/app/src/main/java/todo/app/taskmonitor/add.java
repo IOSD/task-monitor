@@ -41,14 +41,14 @@ import java.util.Calendar;
 
 public class add extends AppCompatActivity {
     EditText task,loc;
-    Button date1,time1,add1;
-    TextView dat,tim;
+//    Button date1,time1,add1;
+    TextView dat,tim1,tim2;
     ImageView img;
     private Uri filePath;
     private static final int PICK_IMAGE_REQUEST = 456;
     StorageReference mStorageRef;
     Uri downloadUrl;
-    String link="",dt,tt,mob,taskno;
+    String link="",dt,tt1,tt2,mob,taskno;
     FirebaseDatabase database;
     static final int READ_BLOCK_SIZE = 100;
     DatabaseReference ref;
@@ -62,7 +62,8 @@ public class add extends AppCompatActivity {
         loc=(EditText)findViewById(R.id.location);
         img=(ImageView)findViewById(R.id.img1);
         dat=(TextView)findViewById(R.id.date);
-        tim=(TextView)findViewById(R.id.time);
+        tim1=(TextView)findViewById(R.id.time1);
+        tim2=(TextView)findViewById(R.id.time2);
 
         mStorageRef = FirebaseStorage.getInstance().getReference();
         database=FirebaseDatabase.getInstance();
@@ -101,7 +102,7 @@ public void showFileChooser(View view) {
             progressDialog.setTitle("Uploading");
             progressDialog.show();
 
-            StorageReference riversRef = mStorageRef.child("images/pic.jpg");
+            final StorageReference riversRef = mStorageRef.child("images/pic.jpg");
             riversRef.putFile(filePath)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -109,7 +110,7 @@ public void showFileChooser(View view) {
                             //if the upload is successfull
                             //hiding the progress dialog
                             progressDialog.dismiss();
-                            Uri downloadUrl = taskSnapshot.getDownloadUrl();
+//                            Uri downloadUrl = StorageReference.getDownloadUrl();
                             //and displaying a success toast
                             link=downloadUrl.toString();
                             Toast.makeText(getApplicationContext(), "File Uploaded "+link, Toast.LENGTH_LONG).show();
@@ -186,9 +187,31 @@ public void showFileChooser(View view) {
                     public void onTimeSet(TimePicker view, int hourOfDay,
                                           int minute) {
 
-                        tim.setText(hourOfDay + ":" + minute);
-                        tt=tim.getText().toString();
-                        Toast.makeText(add.this, tt, Toast.LENGTH_SHORT).show();
+                        tim1.setText(hourOfDay + ":" + minute);
+                        tt1=tim1.getText().toString();
+                        Toast.makeText(add.this, tt1, Toast.LENGTH_SHORT).show();
+                    }
+                }, mHour, mMinute, false);
+        timePickerDialog.show();
+    }
+
+    public void timepick2(View view)
+    {
+        final Calendar c = Calendar.getInstance();
+        mHour = c.get(Calendar.HOUR_OF_DAY);
+        mMinute = c.get(Calendar.MINUTE);
+
+        // Launch Time Picker Dialog
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this,
+                new TimePickerDialog.OnTimeSetListener() {
+
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay,
+                                          int minute) {
+
+                        tim2.setText(hourOfDay + ":" + minute);
+                        tt2=tim1.getText().toString();
+                        Toast.makeText(add.this, tt2, Toast.LENGTH_SHORT).show();
                     }
                 }, mHour, mMinute, false);
         timePickerDialog.show();
@@ -253,7 +276,8 @@ public void showFileChooser(View view) {
         user.setTask_name(task.getText().toString());
         user.setDate(dat.getText().toString());
         user.setLocation(loc.getText().toString());
-        user.setTime(tim.getText().toString());
+        user.setTime1(tim1.getText().toString());
+        user.setTime2(tim2.getText().toString());
         user.setUrl(link);
     }
     public void write2() {
