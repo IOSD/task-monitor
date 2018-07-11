@@ -11,6 +11,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -20,8 +21,11 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,6 +43,11 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.Calendar;
 
+/*
+algo:
+upload the pic with name in format mobile no+key name
+
+ */
 public class add extends AppCompatActivity {
     EditText task,loc;
 //    Button date1,time1,add1;
@@ -51,8 +60,10 @@ public class add extends AppCompatActivity {
     String link="",dt,tt1,tt2,mob,taskno;
     FirebaseDatabase database;
     static final int READ_BLOCK_SIZE = 100;
-    DatabaseReference ref;
+    DatabaseReference ref1;
     users user;
+    String ch;
+    Integer mob1;
     private int mYear, mMonth, mDay, mHour, mMinute;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +78,7 @@ public class add extends AppCompatActivity {
 
         mStorageRef = FirebaseStorage.getInstance().getReference();
         database=FirebaseDatabase.getInstance();
-//        ref=database.getReference("users").child("9734793007");
+
         user=new users();
     }
 //Image capture starts....
@@ -102,46 +113,43 @@ public void showFileChooser(View view) {
             progressDialog.setTitle("Uploading");
             progressDialog.show();
 
-            final StorageReference riversRef = mStorageRef.child("images/pic.jpg");
-            riversRef.putFile(filePath)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            //if the upload is successfull
-                            //hiding the progress dialog
-                            progressDialog.dismiss();
-//                            Uri downloadUrl = StorageReference.getDownloadUrl();
-                            //and displaying a success toast
-                            link=downloadUrl.toString();
-                            Toast.makeText(getApplicationContext(), "File Uploaded "+link, Toast.LENGTH_LONG).show();
+            final StorageReference ref = mStorageRef.child("images/pic"+user.getTask_name()+".jpg");
+            Task uploadTask = ref.putFile(filePath);
 
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
-                            //if the upload is not successfull
-                            //hiding the progress dialog
-                            progressDialog.dismiss();
+            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    if (!task.isSuccessful()) {
+                        throw task.getException();
 
-                            //and displaying error message
-                            Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    })
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            //calculating progress percentage
-                            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                    }
+                    progressDialog.dismiss();
 
-                            //displaying percentage in progress dialog
-                            progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
-                        }
-                    });
+                    // Continue with the task to get the download URL
+                    return ref.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if (task.isSuccessful()) {
+                         downloadUrl = task.getResult();
+                         link=downloadUrl.toString();
+                        Toast.makeText(add.this, downloadUrl.toString(), Toast.LENGTH_SHORT).show();
+                        add2();
+
+
+                    } else {
+                        // Handle failures
+                        // ...
+                    }
+                }
+            });
+
         }
         //if there is not any file
         else {
             //you can display an error toast
+            Toast.makeText(this, "error", Toast.LENGTH_SHORT).show();
         }
 
 
@@ -234,6 +242,7 @@ public void showFileChooser(View view) {
                 String readstring=String.copyValueOf(inputBuffer,0,charRead);
                 s +=readstring;
                 mob=s.toString();
+
             }
             InputRead.close();
 
@@ -259,9 +268,12 @@ public void showFileChooser(View view) {
                 String readstring=String.copyValueOf(inputBuffer,0,charRead);
                 s +=readstring;
                 taskno=s.toString();
+
             }
             InputRead.close();
-
+            mob1=Integer.parseInt(taskno);
+            mob1=6;
+            ch = String.valueOf(mob1 + 1);
 //            textmsg.setText("");
 
 
@@ -279,38 +291,32 @@ public void showFileChooser(View view) {
         user.setTime1(tim1.getText().toString());
         user.setTime2(tim2.getText().toString());
         user.setUrl(link);
-    }
-    public void write2() {
-//        Toast.makeText(getBaseContext(), "1", Toast.LENGTH_SHORT).show();
-        // add-write text into file
-        try {
-            FileOutputStream fileout=openFileOutput("taskn.txt", MODE_PRIVATE);//modeprivate-->modeappend
-            OutputStreamWriter outputWriter=new OutputStreamWriter(fileout);
-            outputWriter.write(taskno+1);
-//            outputWriter.write("0");
-            //outputWriter.append(textmsg0.getText().toString());
-            outputWriter.close();
-
-            //display file saved message
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Toast.makeText(this, link, Toast.LENGTH_SHORT).show();
     }
 
-    public void add1(View view)
-    {
+    public void add1(View view) {
+        getVal1();
         uploadFile();
+    }
+
+    public void add2()
+    {
+        getVal1();
+//        Toast.makeText(this, ch, Toast.LENGTH_SHORT).show();
         database = FirebaseDatabase.getInstance();
-        ref = database.getReference("users");
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        ref1 = database.getReference("users");
+        ref1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 getVal1();
                 ReadBtn();
-                ReadBtn1();
-                ref.child(mob).child("tasks").child(taskno+1).setValue(user);
+//                ReadBtn1();
+
+//                ch = String.valueOf(mob1 + 3);
+                ref1.child(mob).child("tasks").child(user.getTask_name()).setValue(user);
+//                ref1.child("9851124909").child("tasks").child("2").setValue(user);
                 Toast.makeText(add.this, "success1", Toast.LENGTH_SHORT).show();
-                write2();
+//                write2();
             }
 
             @Override
@@ -319,8 +325,5 @@ public void showFileChooser(View view) {
             }
         });
     }
-
-
-
 
 }

@@ -89,22 +89,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void set(String url)
-    {
-        ImageView img=(ImageView)findViewById(R.id.image) ;
-        Picasso.with(this).load(url).placeholder(R.mipmap.ic_launcher)
-                .error(R.mipmap.ic_launcher)
-                .into(img,new com.squareup.picasso.Callback(){
-                    @Override
-                    public void onSuccess()
-                    {
-
-                    }
-                    @Override
-                    public void onError(){}
-                });
-
-    }
     public void ReadBtn() {
         //reading text from file
         try {
@@ -133,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void add(View view)
     {
+        Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show();
         Intent intent=new Intent(this,add.class);
         startActivity(intent);
     }

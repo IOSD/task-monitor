@@ -89,7 +89,24 @@ public class register extends AppCompatActivity {
             }
         });
 
+        write2();
+    }
 
+    public void write2() {
+//        Toast.makeText(getBaseContext(), "1", Toast.LENGTH_SHORT).show();
+        // add-write text into file
+        try {
+            FileOutputStream fileout=openFileOutput("taskn.txt", MODE_PRIVATE);//modeprivate-->modeappend
+            OutputStreamWriter outputWriter=new OutputStreamWriter(fileout);
+            outputWriter.write("0");
+//            outputWriter.write("0");
+            //outputWriter.append(textmsg0.getText().toString());
+            outputWriter.close();
+
+            //display file saved message
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }
