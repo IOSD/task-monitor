@@ -48,7 +48,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyHold
         String url=mylist.getUrl();
         String key=mylist.getKey();
 //        set(url);
-        Toast.makeText(context, url, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(context, url, Toast.LENGTH_SHORT).show();
         Picasso.with(context).load(url).placeholder(R.mipmap.ic_launcher)
                 .error(R.mipmap.ic_launcher)
                 .into(holder.img,new com.squareup.picasso.Callback(){

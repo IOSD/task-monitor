@@ -59,7 +59,7 @@ public class splash extends AppCompatActivity {
             }
             InputRead.close();
             String str=s.toString();
-            Toast.makeText(getBaseContext(),str, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getBaseContext(),str, Toast.LENGTH_SHORT).show();
 
             if(str.equals("1")) {
                 Intent intent=new Intent(this,MainActivity.class);

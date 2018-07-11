@@ -59,6 +59,7 @@ public class displayTask extends AppCompatActivity {
         time2.setText("End Time  :  "+time12);
         location.setText("Location  :  "+location1);
         set(url);
+        storageRef=FirebaseStorage.getInstance().getReference();
     }
 
     public void set(String url)
@@ -83,27 +84,49 @@ public class displayTask extends AppCompatActivity {
         ReadBtn();
         DatabaseReference ref=FirebaseDatabase.getInstance().getReference("users").child(mob).child("tasks").child(key);
         ref.setValue(null);
-        dl1();
-        Intent intent=new Intent(this,MainActivity.class);
-        startActivity(intent);
-    }
-
-    public void dl1()
-    {
-        StorageReference storageRef =storage.getReference();
-        StorageReference desertRef = storageRef.child(mob+"images/pic"+task1+".jpg");
+//        dl1();
+//        Toast.makeText(this, mob+" "+task1, Toast.LENGTH_SHORT).show();
+//        storageRef =storage.getReference();
+        if(url.equals("null"))
+        {
+            Intent intent=new Intent(this,MainActivity.class);
+            startActivity(intent);
+        }
+        StorageReference desertRef = storageRef.child("images/"+mob+"pic"+task1+".jpg");
+//       final StorageReference desertRef = storageRef.child("images/picaab.jpg");
         desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Toast.makeText(displayTask.this, "succssfully deleted", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(displayTask.this, "succssfully deleted", Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(displayTask.this, "error occured while deletion", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(displayTask.this, "error occured while deletion", Toast.LENGTH_SHORT).show();
             }
         });
+
+        Intent intent=new Intent(this,MainActivity.class);
+        startActivity(intent);
     }
+
+//    public void dl1()
+//    {
+//        Toast.makeText(this, mob+" "+task1, Toast.LENGTH_SHORT).show();
+//         storageRef =storage.getReference();
+//        StorageReference desertRef = storageRef.child("images/"+mob+"pic"+task1+".jpg");
+//        desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+//            @Override
+//            public void onSuccess(Void aVoid) {
+//                Toast.makeText(displayTask.this, "succssfully deleted", Toast.LENGTH_SHORT).show();
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception exception) {
+//                Toast.makeText(displayTask.this, "error occured while deletion", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
 
     public void ReadBtn() {
         //reading text from file

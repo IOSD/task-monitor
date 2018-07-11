@@ -135,7 +135,7 @@ public void showFileChooser(View view) {
                     if (task.isSuccessful()) {
                          downloadUrl = task.getResult();
                          link=downloadUrl.toString();
-                        Toast.makeText(add.this, downloadUrl.toString(), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(add.this, downloadUrl.toString(), Toast.LENGTH_SHORT).show();
                         add2();
 
 
@@ -176,7 +176,7 @@ public void showFileChooser(View view) {
 
                         dat.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
                         dt=dat.getText().toString();
-                        Toast.makeText(add.this, dt, Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(add.this, dt, Toast.LENGTH_SHORT).show();
 
                     }
                 }, mYear, mMonth, mDay);
@@ -198,7 +198,7 @@ public void showFileChooser(View view) {
 
                         tim1.setText(hourOfDay + ":" + minute);
                         tt1=tim1.getText().toString();
-                        Toast.makeText(add.this, tt1, Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(add.this, tt1, Toast.LENGTH_SHORT).show();
                     }
                 }, mHour, mMinute, false);
         timePickerDialog.show();
@@ -220,7 +220,7 @@ public void showFileChooser(View view) {
 
                         tim2.setText(hourOfDay + ":" + minute);
                         tt2=tim1.getText().toString();
-                        Toast.makeText(add.this, tt2, Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(add.this, tt2, Toast.LENGTH_SHORT).show();
                     }
                 }, mHour, mMinute, false);
         timePickerDialog.show();
@@ -264,12 +264,18 @@ public void showFileChooser(View view) {
         user.setTime1(tim1.getText().toString());
         user.setTime2(tim2.getText().toString());
         user.setUrl(link);
-        Toast.makeText(this, link, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, link, Toast.LENGTH_SHORT).show();
     }
 
     public void add1(View view) {
-        getVal1();
-        uploadFile();
+//        getVal1();
+        if(filePath!=null)
+        {
+        uploadFile();}
+        else
+        {
+            link="null";
+        add2();}
     }
 
     public void add2()
@@ -288,7 +294,7 @@ public void showFileChooser(View view) {
 //                ch = String.valueOf(mob1 + 3);
                 ref1.child(mob).child("tasks").child(user.getTask_name()).setValue(user);
 //                ref1.child("9851124909").child("tasks").child("2").setValue(user);
-                Toast.makeText(add.this, "success1", Toast.LENGTH_SHORT).show();
+                Toast.makeText(add.this, "success", Toast.LENGTH_SHORT).show();
 //                write2();
             }
 

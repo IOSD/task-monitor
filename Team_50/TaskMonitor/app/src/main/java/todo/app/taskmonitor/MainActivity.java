@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                     users val = dataSnapshot1.getValue(users.class);
                     users user = new users();
                     String name = val.getTask_name();
-                    Toast.makeText(MainActivity.this, name, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainActivity.this, name, Toast.LENGTH_SHORT).show();
                     String time1 = val.getTime1();
                     String time2 = val.getTime2();
                     String loc = val.getLocation();
@@ -117,7 +117,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void add(View view)
     {
-        Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show();
         Intent intent=new Intent(this,add.class);
         startActivity(intent);
     }
