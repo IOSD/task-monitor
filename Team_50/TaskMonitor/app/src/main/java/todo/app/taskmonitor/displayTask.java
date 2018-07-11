@@ -2,14 +2,20 @@ package todo.app.taskmonitor;
 
 import android.content.Intent;
 import android.media.Image;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.awt.font.TextAttribute;
@@ -20,6 +26,8 @@ import java.util.List;
 public class displayTask extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference ref ;
+    FirebaseStorage storage;
+    StorageReference storageRef;
     TextView task,date,time1,time2,location;
     String task1,date1,time11,time12,location1,url,key;
     ImageView img;
@@ -75,8 +83,26 @@ public class displayTask extends AppCompatActivity {
         ReadBtn();
         DatabaseReference ref=FirebaseDatabase.getInstance().getReference("users").child(mob).child("tasks").child(key);
         ref.setValue(null);
+        dl1();
         Intent intent=new Intent(this,MainActivity.class);
         startActivity(intent);
+    }
+
+    public void dl1()
+    {
+        StorageReference storageRef =storage.getReference();
+        StorageReference desertRef = storageRef.child(mob+"images/pic"+task1+".jpg");
+        desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(displayTask.this, "succssfully deleted", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Toast.makeText(displayTask.this, "error occured while deletion", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void ReadBtn() {
@@ -103,5 +129,10 @@ public class displayTask extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void edi(View view)
+    {
+        
     }
 }

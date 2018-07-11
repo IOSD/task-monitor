@@ -80,6 +80,7 @@ public class add extends AppCompatActivity {
         database=FirebaseDatabase.getInstance();
 
         user=new users();
+        ReadBtn();
     }
 //Image capture starts....
 public void showFileChooser(View view) {
@@ -113,7 +114,7 @@ public void showFileChooser(View view) {
             progressDialog.setTitle("Uploading");
             progressDialog.show();
 
-            final StorageReference ref = mStorageRef.child("images/pic"+user.getTask_name()+".jpg");
+            final StorageReference ref = mStorageRef.child("images/"+mob+"pic"+user.getTask_name()+".jpg");
             Task uploadTask = ref.putFile(filePath);
 
             Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
@@ -246,34 +247,6 @@ public void showFileChooser(View view) {
             }
             InputRead.close();
 
-//            textmsg.setText("");
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    public void ReadBtn1() {
-        //reading text from file
-        try {
-            FileInputStream fileIn=openFileInput("taskn.txt");
-            InputStreamReader InputRead= new InputStreamReader(fileIn);
-
-            char[] inputBuffer= new char[READ_BLOCK_SIZE];
-            String s="";
-            int charRead;
-
-            while ((charRead=InputRead.read(inputBuffer))>0) {
-                // char to string conversion
-                String readstring=String.copyValueOf(inputBuffer,0,charRead);
-                s +=readstring;
-                taskno=s.toString();
-
-            }
-            InputRead.close();
-            mob1=Integer.parseInt(taskno);
-            mob1=6;
-            ch = String.valueOf(mob1 + 1);
 //            textmsg.setText("");
 
 
