@@ -8,7 +8,8 @@
     android:color="#d23131"
     xmlns:cardview="http://schemas.android.com/apk/res-auto"
     android:layout_margin="5dp"
-    cardview:cardCornerRadius="10dp">
+    cardview:cardCornerRadius="10dp"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,13 +27,15 @@
             android:id="@+id/task"
             android:layout_width="match_parent"
             android:layout_height="82dp"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:background="#00ffcc"/>
 
         <TextView
             android:id="@+id/date"
             android:layout_width="match_parent"
             android:layout_height="62dp"
-            android:textSize="15dp" />
+            android:textSize="15dp"
+            android:background="#aaff00"/>
 
     </LinearLayout>
 

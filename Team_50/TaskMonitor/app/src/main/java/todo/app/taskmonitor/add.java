@@ -150,7 +150,9 @@ public void showFileChooser(View view) {
         //if there is not any file
         else {
             //you can display an error toast
-            Toast.makeText(this, "error", Toast.LENGTH_SHORT).show();
+            link="null";
+            add2();
+//            Toast.makeText(this, "error", Toast.LENGTH_SHORT).show();
         }
 
 
@@ -268,14 +270,8 @@ public void showFileChooser(View view) {
     }
 
     public void add1(View view) {
-//        getVal1();
-        if(filePath!=null)
-        {
-        uploadFile();}
-        else
-        {
-            link="null";
-        add2();}
+        getVal1();
+        uploadFile();
     }
 
     public void add2()
