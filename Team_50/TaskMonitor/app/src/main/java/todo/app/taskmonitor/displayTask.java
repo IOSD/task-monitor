@@ -110,24 +110,6 @@ public class displayTask extends AppCompatActivity {
         startActivity(intent);
     }
 
-//    public void dl1()
-//    {
-//        Toast.makeText(this, mob+" "+task1, Toast.LENGTH_SHORT).show();
-//         storageRef =storage.getReference();
-//        StorageReference desertRef = storageRef.child("images/"+mob+"pic"+task1+".jpg");
-//        desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-//            @Override
-//            public void onSuccess(Void aVoid) {
-//                Toast.makeText(displayTask.this, "succssfully deleted", Toast.LENGTH_SHORT).show();
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception exception) {
-//                Toast.makeText(displayTask.this, "error occured while deletion", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
-
     public void ReadBtn() {
         //reading text from file
         try {
